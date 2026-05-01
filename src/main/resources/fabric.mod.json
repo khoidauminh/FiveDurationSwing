@@ -14,18 +14,13 @@
 	"license": "CC0-1.0",
 	"icon": "assets/fivedurationswing/icon.png",
 	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"dev.sillibeans.fivedurationswing.FiveDurationSwing"
-		]
-	},
+	"entrypoints": {},
 	"mixins": [
 		"fivedurationswing.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.19.2",
 		"minecraft": "~26.1.2",
-		"java": ">=25",
-		"fabric-api": "*"
+		"java": ">=25"
 	}
 }
