@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "sillibeans.fivedurationswing.mixin",
+  "compatibilityLevel": "JAVA_${java}",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [],
+  "client": [
+    "HandSwingMixin"
+  ]
+}

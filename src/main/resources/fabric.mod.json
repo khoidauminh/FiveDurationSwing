@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "fivedurationswing",
+	"version": "${version}",
+	"name": "Five Duration Swing",
+	"description": "Hand swing changes tailored for my own desires",
+	"authors": [
+		"sillibeans"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"icon": "icon.png",
+	"license": "CC0-1.0",
+	"environment": "*",
+	"entrypoints": {},
+	"mixins": [
+		"fivedurationswing.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${fabricloader}",
+		"minecraft": "*",
+		"java": ">=${java}"
+	}
+}
