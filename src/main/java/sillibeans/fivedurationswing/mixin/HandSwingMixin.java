@@ -10,31 +10,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(Player.class)
 public class HandSwingMixin {
 	@Unique
-	private final static int IDLE_DURATION = 5;
-
-	@Unique
-	private final static int INTERACT_DURATION = 4;
-
-	@Unique
-	private final static int MINE_DURATION = 3;
-
-	@Unique
-	private int progress = 0;
-
-	@Unique
-	private int computeDuration(boolean isLookingAtObj, boolean isMining, boolean isInteracting) {
-		if (isLookingAtObj) {
-			if (isMining) {
-				return MINE_DURATION;
-			}
-
-			if (isInteracting) {
-				return INTERACT_DURATION;
-			}
-		}
-
-		return IDLE_DURATION;
-	}
+	private final static int DURATION = 5;
 
 	/**
 	 * @author sillibeanss
@@ -44,34 +20,41 @@ public class HandSwingMixin {
 	// This is much harder to implement because the animation is fully dependent on swingItem(),
 	// while having no extra info on whether the user is holding down the mouse buttons or not.
 	// This adds 3 different durations for idle (5), interacting (4) and mining (3).
-	// The name "Five Duration Swing" refers to the modern minecraft swing animation
+	// The name "Five Duration Swing" refers to the modern Minecraft swing animation
 	// implementation, where a swing speed of 5 makes the animation run at 3 ticks
 	// while mining (for some reason).
 	@Overwrite
 	protected void updateAI() {
 		Player p = (Player) (Object) this;
-		Minecraft client = Minecraft.getMinecraft();
-		final boolean isLookingAtObj = client.objectMouseOver != null;
-		final boolean isMining = GameSettings.KEY_ATTACK.isPressed();
-		final boolean isInteracting = GameSettings.KEY_INTERACT.isPressed();
 
-		final int duration = computeDuration(isLookingAtObj, isMining, isInteracting);
-
-		if (p.isSwinging) {
-			progress += 1;
-
-			if (progress >= duration) {
-				progress = 0;
-
-				if (!(isLookingAtObj && (isMining || isInteracting))) {
-					p.isSwinging = false;
-				}
-			}
-		} else {
-			progress = 0;
+		if (GameSettings.KEY_ATTACK.isPressed() && Minecraft.getMinecraft().objectMouseOver != null) {
+			swingItem();
 		}
 
-		p.swingProgressInt = progress;
-		p.swingProgress = (float)p.swingProgressInt / (float) IDLE_DURATION;
+		if (p.isSwinging) {
+			p.swingProgressInt += 1;
+
+			if (p.swingProgressInt >= DURATION) {
+				p.swingProgressInt = 0;
+				p.isSwinging = false;
+			}
+		} else {
+			p.swingProgressInt = 0;
+		}
+
+		p.swingProgress = (float)p.swingProgressInt / (float) DURATION;
+	}
+
+	/**
+	 * @author sillibeans
+	 * @reason based on modern Minecraft code.
+	 */
+	@Overwrite
+	public void swingItem() {
+		Player p = (Player) (Object) this;
+		if (!p.isSwinging || p.swingProgressInt >= DURATION / 2 || p.swingProgressInt == -1) {
+			p.isSwinging = true;
+			p.swingProgressInt = -1;
+		}
 	}
 }
