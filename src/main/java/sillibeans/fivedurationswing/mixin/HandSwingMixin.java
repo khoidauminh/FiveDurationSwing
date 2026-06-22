@@ -26,11 +26,13 @@ public class HandSwingMixin {
 	@Overwrite
 	protected void updateAI() {
 		Player p = (Player) (Object) this;
+		Minecraft client = Minecraft.getMinecraft();
 
 		// If the player is holding the attack mouse button and is looking at something,
 		// they most likely is mining, swingItem() should be called every tick to make
 		// sure the hand swing is restarted right after it finishes.
-		if (GameSettings.KEY_ATTACK.isPressed() && Minecraft.getMinecraft().objectMouseOver != null) {
+		// Make sure the hand does not swing again if a screen has been opened.
+		if (GameSettings.KEY_ATTACK.isPressed() && client.objectMouseOver != null && client.currentScreen == null) {
 			swingItem();
 		}
 
